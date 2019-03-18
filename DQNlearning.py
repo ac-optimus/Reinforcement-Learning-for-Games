@@ -167,6 +167,6 @@ def train():
 
 
 if __name__ == "__main__":
-   #train()
-    #print ("---------------------inferencing now---------------------------")
+    train()
+    print ("---------------------inferencing now---------------------------")
     inference()
