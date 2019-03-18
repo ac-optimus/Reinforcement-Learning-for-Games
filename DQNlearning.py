@@ -1,3 +1,5 @@
+''' Code inspired from https://github.com/gsurma/cartpole, ported to pytorch.'''
+
 import random
 import gym
 import numpy as np
@@ -165,6 +167,6 @@ def train():
 
 
 if __name__ == "__main__":
-    #train()
+   #train()
     #print ("---------------------inferencing now---------------------------")
     inference()
