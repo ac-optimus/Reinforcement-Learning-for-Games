@@ -1,3 +1,5 @@
+''' Code inspired from https://github.com/gsurma/cartpole, ported to pytorch.'''
+
 import random
 import gym
 import numpy as np
