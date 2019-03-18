@@ -4,10 +4,8 @@ After working on our environment, we tried using Q-Learning on [Berkley AI Cours
 
 
 ## Files
-`personal_game.ipynb`: our take on creating an environment to understand rewards, states, actions, etc. better.
-`DQNlearning.py`: file that tries to train an agent to play CartPool-v1 from OpenAI gym using the observation space vector and a fully connected neural network.
-
-The code uses the base code at [gsurma/cartpole][3] and is ported to use PyTorch with some experimentations on the network architecture.
+- `personal_game.ipynb`: our take on creating an environment to understand rewards, states, actions, etc. better.<br>
+- `DQNlearning.py`: file that tries to train an agent to play CartPool-v1 from OpenAI gym using the observation space vector and a fully connected neural network.<br> The code uses the base code at [gsurma/cartpole][3] and is ported to use PyTorch with some experimentations on the network architecture.
 
 We plan to look at the following policies to try to train our agents:
 - [x] Q-learning
