@@ -4,6 +4,10 @@ import gym
 import numpy as np
 import math
 from collections import deque
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+from plotUtils import plot_
 
 class ObsDesc:
     def __init__(self, env, buckets=(1, 1, 6, 12,), up=None, low=None):
@@ -58,39 +62,76 @@ class QCartPoleSolver():
     def get_alpha(self, t):
         return max(self.min_alpha, min(1.0, 1.0 - math.log10((t + 1) / self.ada_divisor)))
 
-    def run(self):
-        scores = deque(maxlen=100)
 
-        for e in range(self.n_episodes):
-            current_state = self.obscretizer.discretize(self.env.reset())
 
-            alpha = self.get_alpha(e)
-            epsilon = self.get_epsilon(e)
-            done = False
-            i = 0
+    def run_naya(self):
+        lis = []
+        count =0
+        for i in range(200):
+            retrn = 0
+            state = self.obscretizer.discretize(self.env.reset())
+            alpha = self.get_alpha(i)
+            epsilon = self.get_epsilon(i)
+            done =False
+            while True:
+                retrn += 1
+                #time.sleep(0.01)
+               # self.env.render()
+                #time.sleep(0.1)
+                action = self.choose_action(state, epsilon)
+                state_next, reward, done, info = self.env.step(action)
+                state_next = self.obscretizer.discretize(state_next)
+                self.Q[state][action] += alpha * \
+                    (reward + self.gamma * np.max(self.Q[state_next]) - self.Q[state][action])
+                retrn += 1
+                state = state_next
+                if done:
+                    
+                    lis.append(retrn)
+                    if retrn >200:
+                        print (count)
+                        count +=1
+                    print ("Epsoid: " + str(i) + "score: " + str(retrn))
+                    break 
+            
+        plot_(np.arange(len(lis)),lis,"No of episode","Reward","Win Rate",200,count)
 
-            while not done:
-                # self.env.render()
-                action = self.choose_action(current_state, epsilon)
-                obs, reward, done, _ = self.env.step(action)
-                new_state = self.obscretizer.discretize(obs)
-                self.update_q(current_state, action, reward, new_state, alpha)
-                current_state = new_state
-                i += 1
+        # plt.plot(np.arange(len(lis_)),lis_)
+        # plt.xlabel("No of episodes")
+        # plt.ylabel("Return(Cummulative rewards)")
+        # plt.title("Q Learning")
+        # plt.show()
+    def inference (self):
+        lis = []
+        count =0
+        for i in range(200):
+            retrn = 0
+            state = self.obscretizer.discretize(self.env.reset())
+            done =False
+            while True:
+                retrn += 1
+                #time.sleep(0.01)
+               # self.env.render()
+                #time.sleep(0.1)
+                action = np.argmax(self.Q[state])
+                state_next, reward, done, info = self.env.step(action)
+                state_next = self.obscretizer.discretize(state_next)
+                # self.Q[state][action] += alpha * \
+                #     (reward + self.gamma * np.max(self.Q[state_next]) - self.Q[state][action])
+                retrn += 1
+                state = state_next
+                if done:
+                    lis.append(retrn)
+                    if count >200:
+                        count +=1
+                    print ("Epsoid: " + str(i) + "score: " + str(retrn))
+                    break 
+            
+        plot_(np.arange(len(lis)),lis,"No of episode","Reward","Win Rate",200,count)
 
-            scores.append(i)
-            mean_score = np.mean(scores)
-            if mean_score >= self.n_win_ticks and e >= 100:
-                if not self.quiet: 
-                    print('Ran {} episodes. Solved after {} trials ✔'.format(e, e - 100))
-                return e - 100
-            if e % 100 == 0 and not self.quiet:
-                print('[Episode {}] - Mean survival time over last 100 episodes was {} ticks.'.format(e, mean_score))
-
-        if not self.quiet: print('Did not solve after {} episodes 😞'.format(e))
-        return e
 
 if __name__ == "__main__":
     solver = QCartPoleSolver()
-    solver.run()
+    solver.run_naya()
+    #solver.inference()
     # gym.upload('tmp/cartpole-1', api_key='')
