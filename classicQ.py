@@ -122,7 +122,7 @@ class QCartPoleSolver():
                 state = state_next
                 if done:
                     lis.append(retrn)
-                    if count >200:
+                    if retrn >200:
                         count +=1
                     print ("Epsoid: " + str(i) + "score: " + str(retrn))
                     break 
@@ -133,5 +133,5 @@ class QCartPoleSolver():
 if __name__ == "__main__":
     solver = QCartPoleSolver()
     solver.run_naya()
-    #solver.inference()
+    solver.inference()
     # gym.upload('tmp/cartpole-1', api_key='')

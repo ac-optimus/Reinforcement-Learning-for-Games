@@ -13,7 +13,7 @@ from plotUtils import plot_
 ENV_NAME = "CartPole-v1"
 
 GAMMA = 0.99
-LEARNING_RATE = 0.0002
+LEARNING_RATE = 0.002
 
 MEMORY_SIZE = 1000000
 BATCH_SIZE = 20
@@ -112,15 +112,15 @@ def inference():
     num_epsoid = 0
     lis = []
     count =0
-    while num_epsoid <200:
+    while num_epsoid <1000:
         num_epsoid += 1
         state = env.reset()
         state = np.reshape(state, [1, observation_space])
         step = 0
         while True:
             step += 1
-#            time.sleep(0.01)
-       #     env.render()
+            time.sleep(0.01)
+            env.render()
             with torch.no_grad():
                 q_values = model(torch.tensor(state))
                 action = torch.argmax(q_values[0]).item()
@@ -175,6 +175,6 @@ def train():
 
 
 if __name__ == "__main__":
-  #  train()
+    train()
     print ("---------------------inferencing now---------------------------")
     inference()
