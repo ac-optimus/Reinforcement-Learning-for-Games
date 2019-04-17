@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 from plotUtils import plot_
 
 ENV_NAME = "CartPole-v1"
-
+#ENV_NAME = "MsPacman-ram-v0"
 GAMMA = 0.99
-LEARNING_RATE = 0.002
+LEARNING_RATE = 0.0002
 
 MEMORY_SIZE = 1000000
 BATCH_SIZE = 20
@@ -58,9 +58,9 @@ class Netx(nn.Module):
 
 class DQNSolver:
 
-    def __init__(self, observation_space, action_space):
+    def __init__(self, observation_space, action_space, agent = "DQN"):
         self.exploration_rate = EXPLORATION_MAX
-
+        self.agent = agent
         self.action_space = action_space
         self.memory = deque(maxlen=MEMORY_SIZE)
 
@@ -93,7 +93,12 @@ class DQNSolver:
             if not terminal:
                 with torch.no_grad():
                     preds = self.model(torch.tensor(state_next))
-                    q_update = (reward + GAMMA * torch.max(preds[0]).item())
+                    update_q = torch.max(preds[0]).item()
+                    if self.agent == "DDQN":
+                        update_q = torch.argmax(preds[0]).item()
+                        pred2 = self.model(torch.tensor(state_next))
+                        update_q = pred2[0][update_q]
+                    q_update = (reward + GAMMA * update_q)
             q_values_output = self.model(torch.tensor(state))
             q_values_target = q_values_output.clone().detach().requires_grad_(False)
             q_values_target[0][action] = q_update
@@ -138,11 +143,11 @@ def inference():
     plot_(np.arange(len(lis)),lis,"No of episode","Reward","Win Rate",200,count)
 #    (x_, y_,x_label="Not given", y_label = "Not given", title_ = "Not given", Thresh = None):
 
-def train():
+def train(agent):
     env = gym.make(ENV_NAME)
     observation_space = env.observation_space.shape[0]
     action_space = env.action_space.n
-    dqn_solver = DQNSolver(observation_space, action_space)
+    dqn_solver = DQNSolver(observation_space, action_space, agent)
     num_epsoid = 0
     l = []
     start = time.time()
@@ -175,6 +180,7 @@ def train():
 
 
 if __name__ == "__main__":
-    train()
+    agent  = "DDQN"
+    train(agent)
     print ("---------------------inferencing now---------------------------")
-    inference()
+    #inference()
