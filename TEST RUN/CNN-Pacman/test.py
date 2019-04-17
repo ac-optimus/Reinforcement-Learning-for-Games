@@ -18,7 +18,7 @@ import os
 import random
 import pandas as pd
 from agent import Agent
-
+import sys
 
 #####
 # Hyperparameters
@@ -41,7 +41,11 @@ LEARNING_RATE = 0.1
 PREPROCESS_IMAGE_DIM = 84
 
 #I/O parameters
-OUTPUT_DIR = "./tmp"
+try:
+    OUTPUT_DIR = sys.argv[1]
+except:
+    OUTPUT_DIR = "./tmp"
+
 LOG_NAME = "output_tmux_final_2_1.log"
 MONITOR_DIR = "ms-pacman-experiment-tmux_final_2_1"
 EPISODES_DIR = "episode_data_final_2_1"
