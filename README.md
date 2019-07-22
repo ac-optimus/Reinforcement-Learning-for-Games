@@ -1,8 +1,8 @@
 # Intro
-In this repository, we analyze some popular ways that are used to train agents in the domain of Reinforcement Learning. Initially, we tried having our own environment and using it, but since we wanted to move to a more complex environment, we ended up using [OpenAI's Gym][1]. <br>
+In this project, we analyze some popular ways that are used to train agents in the domain of Reinforcement Learning. Initially, we tried having our own environment and using it, but since we wanted to move to a more complex environment, we ended up using [OpenAI's Gym][1]. <br>
 After working on our environment, we tried using Q-Learning on [Berkley AI Course][2]'s Pacman Environment.
 
-We looked at the following policies to try to train our agents:
+## We looked at the following policies to try to train our agents:
 - [x] Q-learning on Berkley Pacman
 - [x] Q-learning on Cartpool
 - [x] Deep Q Network directly using observation space vector
@@ -10,10 +10,6 @@ We looked at the following policies to try to train our agents:
 
 - [x] Double Q Learning
 
-
-## Plan
-
-Plan to use Deep Q Network using CNNs on games like CartPool-v1, LunarLander and MsPacman and add some graphs showcasing the difference in the speed of learning.
 
 ## Final Results
 
